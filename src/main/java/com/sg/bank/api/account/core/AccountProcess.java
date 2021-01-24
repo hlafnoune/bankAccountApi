@@ -6,4 +6,5 @@ public interface AccountProcess {
 
     void deposit(String accountNumber, BigDecimal amount);
 
+    void withdrawal(String accountNumber, BigDecimal amount);
 }

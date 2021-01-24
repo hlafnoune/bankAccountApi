@@ -10,4 +10,5 @@ public interface AccountService {
 
     void deposit(Account account, BigDecimal amount);
 
+    void withdrawal(Account account, BigDecimal amount);
 }

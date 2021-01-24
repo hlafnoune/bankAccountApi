@@ -34,7 +34,25 @@ public class AccountController {
     public ResponseEntity<Object> deposit(@PathVariable("accountNumber") String accountNumber,
                                           @PathVariable("amount") BigDecimal amount) {
 
+        System.out.println(amount);
         accountProcess.deposit(accountNumber, amount);
+
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * We hvae to be sure that the accountNumber belongs to the user connected and autorized to to that !!
+     *
+     * @param accountNumber
+     * @param amount
+     * @return
+     */
+    @PostMapping
+    @RequestMapping("/{accountNumber}/withdrawal/{amount}")
+    public ResponseEntity<Object> withdrawal(@PathVariable("accountNumber") String accountNumber,
+                                             @PathVariable("amount") BigDecimal amount) {
+
+        accountProcess.withdrawal(accountNumber, amount);
 
         return ResponseEntity.ok().build();
     }

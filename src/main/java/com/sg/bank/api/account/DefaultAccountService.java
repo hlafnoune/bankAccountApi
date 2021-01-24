@@ -31,7 +31,15 @@ public class DefaultAccountService implements AccountService {
 
     @Override
     public void deposit(Account account, BigDecimal amount) {
+        System.out.println("account.getBalance : " + account.getBalance());
         BigDecimal newBalance = Optional.ofNullable(account.getBalance()).orElse(BigDecimal.ZERO).add(amount);
+        System.out.println("account.getBalance : " + newBalance);
+        accountRepository.updateBalanceByAccountNumber(account.getAccountNumber(), newBalance);
+    }
+
+    @Override
+    public void withdrawal(Account account, BigDecimal amount) {
+        BigDecimal newBalance = Optional.ofNullable(account.getBalance()).orElse(BigDecimal.ZERO).subtract(amount);
         accountRepository.updateBalanceByAccountNumber(account.getAccountNumber(), newBalance);
     }
 }

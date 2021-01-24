@@ -67,6 +67,49 @@ class AccountControllerTest {
             verify(accountProcess).deposit(ACCOUNT_NUMBER, AMOUNT);
         }
 
+    }
+
+
+    @Nested
+    class Withdrawal {
+
+        private static final String ACCOUNT_NUMBER = "SG00000001";
+        private final BigDecimal AMOUNT = BigDecimal.valueOf(100);
+        private final String ACCOUNT_WITHDRAWAL_URL = "/api/v1/accounts/" + ACCOUNT_NUMBER + "/withdrawal/" + AMOUNT;
+
+        @Test
+        void should_call_account_process_to_withdrawal_money_and_return_OK_status() throws Exception {
+
+            doNothing().when(accountProcess).withdrawal(anyString(), any(BigDecimal.class));
+
+            mockMvc.perform(get(ACCOUNT_WITHDRAWAL_URL))
+                    .andExpect(status().isOk());
+
+            verify(accountProcess).withdrawal(ACCOUNT_NUMBER, AMOUNT);
+        }
+
+        @Test
+        void should_call_return_not_found_status_if_the_process_throw_AccountNotFoundException() throws Exception {
+
+            doThrow(new AccountNotFoundException(ACCOUNT_NUMBER)).when(accountProcess).withdrawal(anyString(), any(BigDecimal.class));
+
+            mockMvc.perform(get(ACCOUNT_WITHDRAWAL_URL))
+                    .andExpect(status().isNotFound());
+
+            verify(accountProcess).withdrawal(ACCOUNT_NUMBER, AMOUNT);
+        }
+
+        @Test
+        void should_call_return_internal_server_error_status_if_the_process_throw_any_other_exception() throws Exception {
+
+            doThrow(new RuntimeException()).when(accountProcess).withdrawal(anyString(), any(BigDecimal.class));
+
+            mockMvc.perform(get(ACCOUNT_WITHDRAWAL_URL))
+                    .andExpect(status().isInternalServerError());
+
+            verify(accountProcess).withdrawal(ACCOUNT_NUMBER, AMOUNT);
+        }
+
 
     }
 }

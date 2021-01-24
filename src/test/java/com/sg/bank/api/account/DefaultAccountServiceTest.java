@@ -41,7 +41,6 @@ class DefaultAccountServiceTest {
     @Nested
     class findAccountByAccountNumber {
 
-
         @BeforeEach
         void setUp() {
             when(accountRepository.findAccountByAccountNumber(ACCOUNT_NUMBER)).thenReturn(account);
@@ -80,6 +79,23 @@ class DefaultAccountServiceTest {
         void should_update_account_balance_by_accountNumber() {
             accountService.deposit(account, AMOUNT);
             verify(accountRepository).updateBalanceByAccountNumber(ACCOUNT_NUMBER, BigDecimal.valueOf(5100));
+        }
+    }
+
+    @Nested
+    class Withdrawal {
+
+        @Test
+        void should_set_the_amount_as_new_balance_if_the_balance_is_null() {
+            account.setBalance(null);
+            accountService.withdrawal(account, AMOUNT);
+            verify(accountRepository).updateBalanceByAccountNumber(ACCOUNT_NUMBER, BigDecimal.valueOf(-100));
+        }
+
+        @Test
+        void should_update_account_balance_by_accountNumber() {
+            accountService.withdrawal(account, AMOUNT);
+            verify(accountRepository).updateBalanceByAccountNumber(ACCOUNT_NUMBER, BigDecimal.valueOf(4900));
         }
     }
 
