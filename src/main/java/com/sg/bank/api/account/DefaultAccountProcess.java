@@ -3,6 +3,7 @@ package com.sg.bank.api.account;
 import com.sg.bank.api.account.core.AccountProcess;
 import com.sg.bank.api.account.core.AccountService;
 import com.sg.bank.api.account.model.Account;
+import com.sg.bank.api.event.core.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,18 +15,20 @@ public class DefaultAccountProcess implements AccountProcess {
 
     private final AccountService accountService;
 
+    private final EventService eventService;
+
     @Autowired
-    public DefaultAccountProcess(AccountService accountService) {
+    public DefaultAccountProcess(AccountService accountService, EventService eventService) {
         this.accountService = accountService;
+        this.eventService = eventService;
     }
 
     @Override
     @Transactional
     public void deposit(String accountNumber, BigDecimal amount) {
-        System.out.println("amount : " + amount);
         Account account = accountService.findAccountByAccountNumber(accountNumber);
-        System.out.println("account.getBalance : " + account.getBalance());
         accountService.deposit(account, amount);
+        eventService.traceDepositOperation(accountNumber, amount, account.getBalance());
     }
 
     @Override

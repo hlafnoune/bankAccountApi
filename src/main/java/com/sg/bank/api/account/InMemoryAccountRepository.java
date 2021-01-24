@@ -13,8 +13,8 @@ import java.math.BigDecimal;
 @Repository
 public class InMemoryAccountRepository extends AbstractRepository implements AccountRepository {
 
-    private static final String FIND_ACCOUNT_BY_ACCOUNT_NUMBER = "SELECT * FROM ACCOUNT WHERE ACCOUNT_NUMBER =:accountNumber";
-    private static final String UPDTAE_BALANCE_BY_ACCOUNT_NUMBER = "UPDATE ACCOUNT SET BALANCE =:newBalance WHERE ACCOUNT_NUMBER =:accountNumber";
+    private static final String FIND_ACCOUNT_BY_ACCOUNT_NUMBER = "SELECT * FROM ACCOUNTS WHERE ACCOUNT_NUMBER =:accountNumber";
+    private static final String UPDTAE_BALANCE_BY_ACCOUNT_NUMBER = "UPDATE ACCOUNTS SET BALANCE =:newBalance WHERE ACCOUNT_NUMBER =:accountNumber";
 
     @Override
     public Account findAccountByAccountNumber(String accountNumber) {

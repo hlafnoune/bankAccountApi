@@ -2,6 +2,7 @@ package com.sg.bank.api.account;
 
 import com.sg.bank.api.account.core.AccountService;
 import com.sg.bank.api.account.model.Account;
+import com.sg.bank.api.event.core.EventService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ class DefaultAccountProcessTest {
 
     private static final String ACCOUNT_NUMBER = "SG00000001";
     private static final BigDecimal AMOUNT = BigDecimal.valueOf(100);
+    private static final BigDecimal BALANCE = BigDecimal.valueOf(5000);
 
     @InjectMocks
     private DefaultAccountProcess accountProcess;
@@ -27,11 +29,14 @@ class DefaultAccountProcessTest {
     @Mock
     private AccountService accountService;
 
+    @Mock
+    private EventService eventService;
+
     private Account account;
 
     @BeforeEach
     void setUp() {
-        account = new Account(ACCOUNT_NUMBER, BigDecimal.valueOf(5000));
+        account = new Account(ACCOUNT_NUMBER, BALANCE);
         when(accountService.findAccountByAccountNumber(ACCOUNT_NUMBER)).thenReturn(account);
     }
 
@@ -49,12 +54,18 @@ class DefaultAccountProcessTest {
             accountProcess.deposit(ACCOUNT_NUMBER, AMOUNT);
             verify(accountService).deposit(account, AMOUNT);
         }
+
+        @Test
+        void should_call_trace_the_deposit_operation() {
+            accountProcess.deposit(ACCOUNT_NUMBER, AMOUNT);
+            verify(eventService).traceDepositOperation(ACCOUNT_NUMBER, AMOUNT, BALANCE);
+        }
     }
 
 
     @Nested
     class Withdrawal {
-        
+
         @Test
         void should_find_account_by_accountNumber() {
             accountProcess.withdrawal(ACCOUNT_NUMBER, AMOUNT);

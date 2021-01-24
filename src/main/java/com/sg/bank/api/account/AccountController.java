@@ -34,7 +34,6 @@ public class AccountController {
     public ResponseEntity<Object> deposit(@PathVariable("accountNumber") String accountNumber,
                                           @PathVariable("amount") BigDecimal amount) {
 
-        System.out.println(amount);
         accountProcess.deposit(accountNumber, amount);
 
         return ResponseEntity.ok().build();
