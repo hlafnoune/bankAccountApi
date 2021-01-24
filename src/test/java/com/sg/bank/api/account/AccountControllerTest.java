@@ -21,6 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = AccountController.class)
 class AccountControllerTest {
 
+    private static final String ACCOUNTS_URL = "/api/v1/accounts/";
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -32,7 +34,7 @@ class AccountControllerTest {
 
         private static final String ACCOUNT_NUMBER = "SG00000001";
         private final BigDecimal AMOUNT = BigDecimal.valueOf(100);
-        private final String ACCOUNT_DEPOSIT_URL = "/api/v1/accounts/" + ACCOUNT_NUMBER + "/deposit/" + AMOUNT;
+        private final String ACCOUNT_DEPOSIT_URL = ACCOUNTS_URL + ACCOUNT_NUMBER + "/deposit/" + AMOUNT;
 
         @Test
         void should_call_account_process_to_depose_money_and_return_OK_status() throws Exception {
@@ -75,7 +77,7 @@ class AccountControllerTest {
 
         private static final String ACCOUNT_NUMBER = "SG00000001";
         private final BigDecimal AMOUNT = BigDecimal.valueOf(100);
-        private final String ACCOUNT_WITHDRAWAL_URL = "/api/v1/accounts/" + ACCOUNT_NUMBER + "/withdrawal/" + AMOUNT;
+        private final String ACCOUNT_WITHDRAWAL_URL = ACCOUNTS_URL + ACCOUNT_NUMBER + "/withdrawal/" + AMOUNT;
 
         @Test
         void should_call_account_process_to_withdrawal_money_and_return_OK_status() throws Exception {

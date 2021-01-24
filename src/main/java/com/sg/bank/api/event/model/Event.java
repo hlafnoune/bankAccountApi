@@ -1,10 +1,13 @@
 package com.sg.bank.api.event.model;
 
+import java.time.LocalDateTime;
+
 public class Event {
 
     private String accountNumber;
     private Operation operation;
     private String description;
+    private LocalDateTime createDate;
 
     public String getAccountNumber() {
         return accountNumber;
@@ -30,11 +33,20 @@ public class Event {
         this.description = description;
     }
 
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
+    }
+
     public static class Builder {
 
         private String accountNumber;
         private Operation operation;
         private String description;
+        private LocalDateTime createDate;
 
         private Builder() {
         }
@@ -58,11 +70,17 @@ public class Event {
             return this;
         }
 
+        public Builder withCreateDate(LocalDateTime createDate) {
+            this.createDate = createDate;
+            return this;
+        }
+
         public Event build() {
             Event event = new Event();
             event.accountNumber = accountNumber;
             event.operation = operation;
             event.description = description;
+            event.createDate = createDate;
             return event;
         }
     }
