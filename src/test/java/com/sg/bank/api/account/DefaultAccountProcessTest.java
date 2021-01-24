@@ -77,5 +77,12 @@ class DefaultAccountProcessTest {
             accountProcess.withdrawal(ACCOUNT_NUMBER, AMOUNT);
             verify(accountService).withdrawal(account, AMOUNT);
         }
+
+
+        @Test
+        void should_call_trace_the_withdrawal_operation() {
+            accountProcess.withdrawal(ACCOUNT_NUMBER, AMOUNT);
+            verify(eventService).traceWithdrawalOperation(ACCOUNT_NUMBER, AMOUNT, BALANCE);
+        }
     }
 }

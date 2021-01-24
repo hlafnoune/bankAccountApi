@@ -22,15 +22,25 @@ public class DefaultEventService implements EventService {
     @Override
     public void traceDepositOperation(final String accountNumber, final BigDecimal amount, final BigDecimal balance) {
         final String description = String.format("Deposit of %.2f to the balance %.2f", amount, balance);
-        Event event = buildEvent(accountNumber, description);
-        eventRepository.trace(event);
+        traceEvent(accountNumber, description, Operation.DEPOSIT);
     }
 
-    private Event buildEvent(String accountNumber, String description) {
+    @Override
+    public void traceWithdrawalOperation(String accountNumber, BigDecimal amount, BigDecimal balance) {
+        final String description = String.format("Withdrawal of %.2f from the balance %.2f", amount, balance);
+        traceEvent(accountNumber, description, Operation.WITHDRAWAL);
+    }
+
+    private void traceEvent(String accountNumber, String description, Operation withdrawal) {
+        Event event = buildEvent(accountNumber, description, withdrawal);
+        eventRepository.trace(event);
+    }
+    
+    private Event buildEvent(String accountNumber, String description, Operation operation) {
         return Event.Builder.getInstance()
-                    .withAccountNumber(accountNumber)
-                    .withOperation(Operation.DEPOSIT)
-                    .withDescription(description)
-                    .build();
+                .withAccountNumber(accountNumber)
+                .withOperation(operation)
+                .withDescription(description)
+                .build();
     }
 }

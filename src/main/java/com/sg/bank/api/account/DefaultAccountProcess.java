@@ -36,5 +36,6 @@ public class DefaultAccountProcess implements AccountProcess {
     public void withdrawal(String accountNumber, BigDecimal amount) {
         Account account = accountService.findAccountByAccountNumber(accountNumber);
         accountService.withdrawal(account, amount);
+        eventService.traceWithdrawalOperation(accountNumber, amount, account.getBalance());
     }
 }

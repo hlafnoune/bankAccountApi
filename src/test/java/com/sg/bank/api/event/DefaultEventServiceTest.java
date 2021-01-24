@@ -43,17 +43,36 @@ class DefaultEventServiceTest {
 
             final String description = String.format("Deposit of %.2f to the balance %.2f", AMOUNT, BALANCE);
             Event actualEvent = eventArgumentCaptor.getValue();
-            Event expectedEvent = buildEvent(ACCOUNT_NUMBER, description, Operation.DEPOSIT);
+            Event expectedEvent = buildEvent(description, Operation.DEPOSIT);
             assertThat(actualEvent).usingRecursiveComparison().isEqualTo(expectedEvent);
         }
+    }
 
-        private Event buildEvent(String accountNumber, String description, Operation operation) {
-            return Event.Builder.getInstance()
-                    .withAccountNumber(accountNumber)
-                    .withOperation(operation)
-                    .withDescription(description)
-                    .build();
+    @Nested
+    class traceWithdrawalOperation {
+
+        @Test
+        void should_trace_a_withdrawal_operation() {
+
+            ArgumentCaptor<Event> eventArgumentCaptor = ArgumentCaptor.forClass(Event.class);
+
+            eventService.traceWithdrawalOperation(ACCOUNT_NUMBER, AMOUNT, BALANCE);
+
+            verify(eventRepository).trace(eventArgumentCaptor.capture());
+
+            final String description = String.format("Withdrawal of %.2f from the balance %.2f", AMOUNT, BALANCE);
+            Event actualEvent = eventArgumentCaptor.getValue();
+            Event expectedEvent = buildEvent(description, Operation.WITHDRAWAL);
+            assertThat(actualEvent).usingRecursiveComparison().isEqualTo(expectedEvent);
         }
+    }
+
+    private Event buildEvent(String description, Operation operation) {
+        return Event.Builder.getInstance()
+                .withAccountNumber(ACCOUNT_NUMBER)
+                .withOperation(operation)
+                .withDescription(description)
+                .build();
     }
 
 }
